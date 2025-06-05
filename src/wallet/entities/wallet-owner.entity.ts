@@ -1,4 +1,4 @@
-// src/wallet/entities/ledger-account.entity.ts
+// src/wallet/entities/wallet-owner.entity.ts
 import { Entity, Property, PrimaryKey, OneToOne } from '@mikro-orm/core';
 import { Wallet } from './wallet.entity';
 
@@ -22,6 +22,6 @@ export class WalletOwner {
   @Property({ nullable: true })
   nationalId?: string;
 
-  @OneToOne(() => Wallet, wallet => wallet.owner, { nullable: true })
-  wallet?: Wallet;
+  @OneToOne(() => Wallet, wallet => wallet.owner) // 👈 This is the inverse side
+  wallet!: Wallet;
 }

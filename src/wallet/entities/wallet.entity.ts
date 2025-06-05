@@ -1,3 +1,4 @@
+// src/wallet/entities/wallet.entity.ts
 import { Entity, Property, PrimaryKey, OneToOne } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { WalletOwner } from './wallet-owner.entity';
@@ -7,7 +8,7 @@ export class Wallet {
   @PrimaryKey()
   id: string = v4();
 
-  @OneToOne(() => WalletOwner, owner => owner.wallet)
+  @OneToOne(() => WalletOwner, owner => owner.wallet, { owner: true }) // 👈 Add owner: true here
   owner!: WalletOwner;
 
   @Property()
