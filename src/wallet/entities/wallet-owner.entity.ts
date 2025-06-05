@@ -1,3 +1,4 @@
+// src/wallet/entities/ledger-account.entity.ts
 import { Entity, Property, PrimaryKey, OneToOne } from '@mikro-orm/core';
 import { Wallet } from './wallet.entity';
 
