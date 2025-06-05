@@ -2,10 +2,10 @@
 
 import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { Wallet } from './entities/wallet.entity';
-import { WalletOwner } from './entities/wallet-owner.entity';
-import { LedgerAccount } from './entities/ledger-account.entity';
-import { Transaction } from './entities/transaction.entity';
+import { Wallet } from './src/wallet/entities/wallet.entity';
+import { WalletOwner } from './src/wallet/entities/wallet-owner.entity';
+import { LedgerAccount } from './src/wallet/entities/ledger-account.entity';
+import { Transaction } from './src/wallet/entities/transaction.entity';
 
 const config: MikroOrmModuleOptions = {
   driver: PostgreSqlDriver,
