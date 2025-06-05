@@ -1,5 +1,5 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; // Rename 'v4' to avoid name conflict
 
 export enum TransactionType {
   WALLET_RECHARGE = 'wallet_recharge',
@@ -17,9 +17,10 @@ export enum TransactionStatus {
 @Entity()
 export class Transaction {
   @PrimaryKey()
-  id: string = v4();
+  id: string = uuidv4();
 
-  @Property({ type: 'enum', enum: TransactionType })
+  // ✅ Remove invalid 'enum' keyword, set type to string, and keep enum logic in the TypeScript type
+  @Property({ type: 'string' })
   type!: TransactionType;
 
   @Property()
@@ -40,6 +41,6 @@ export class Transaction {
   @Property()
   timestamp: Date = new Date();
 
-  @Property({ type: 'enum', enum: TransactionStatus })
+  @Property({ type: 'string' })
   status: TransactionStatus = TransactionStatus.PENDING;
 }
