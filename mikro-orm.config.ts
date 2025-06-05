@@ -16,6 +16,11 @@ const config: MikroOrmModuleOptions = {
   dbName: 'haiti_pay',
   entities: [WalletOwner, Wallet, LedgerAccount, Transaction],
   debug: true,
+  migrations: {
+    path: './src/migrations', // chemin vers les fichiers de migration
+    pathTs: './src/migrations', // nécessaire pour le support TypeScript
+    glob: '!(*.d).{ts,js}',     // expression pour détecter les fichiers de migration
+  },
 };
 
 export default config;
