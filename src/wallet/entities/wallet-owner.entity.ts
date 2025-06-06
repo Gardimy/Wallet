@@ -22,6 +22,6 @@ export class WalletOwner {
   @Property({ nullable: true })
   nationalId?: string;
 
-  @OneToOne(() => Wallet, wallet => wallet.owner) // 👈 This is the inverse side
+  @OneToOne(() => Wallet, wallet => wallet.owner) // This is the inverse side
   wallet!: Wallet;
 }
