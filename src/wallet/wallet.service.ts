@@ -27,6 +27,8 @@ export class WalletService {
     let ledger = await this.em.findOne(LedgerAccount, { id: 'LEDGER_MASTER' });
     if (!ledger) {
       ledger = new LedgerAccount();
+      ledger.id = 'LEDGER_MASTER';
+      ledger.balance = 10000000; // Exemple de solde initial (10M HTG)
       await this.em.persistAndFlush(ledger);
     }
 
@@ -68,43 +70,7 @@ export class WalletService {
     };
   }
 
-  async rechargeWallet(phoneNumber: string, amount: number, pin: string) {
-  if (amount <= 0) {
-    throw new BadRequestException('Le montant de la recharge doit être supérieur à zéro.');
-  }
-
-  const owner = await this.em.findOne(WalletOwner, { phoneNumber }, { populate: ['wallet'] });
-
-  if (!owner || !owner.wallet) {
-    throw new NotFoundException('Wallet introuvable.');
-  }
-
-  if (owner.wallet.pin !== pin) {
-    throw new BadRequestException('PIN invalide.');
-  }
-
-  owner.wallet.balance += amount;
-
-  const transaction = new Transaction();
-  transaction.type = TransactionType.WALLET_RECHARGE;
-  transaction.fromAccountId = 'EXTERNAL_RECHARGE';
-  transaction.toAccountId = owner.wallet.id;
-  transaction.amount = amount;
-  transaction.fees = 0;
-  transaction.description = `Recharge de ${amount} HTG sur le wallet de ${phoneNumber}`;
-  transaction.status = TransactionStatus.COMPLETED;
-
-  await this.em.persistAndFlush([owner.wallet, transaction]);
-
-  return {
-    success: true,
-    message: 'Recharge effectuée avec succès.',
-    transactionId: transaction.id,
-    newBalance: owner.wallet.balance,
-  };
-}
-
-  // ✅ Recharge Method
+  // Recharge depuis le Ledger vers Wallet
   async recharge(phoneNumber: string, pin: string, amount: number) {
     if (amount < 50 || amount > 50000) {
       throw new BadRequestException('Le montant doit être entre 50 et 50,000 HTG.');
@@ -119,13 +85,11 @@ export class WalletService {
       throw new BadRequestException('PIN invalide.');
     }
 
- // Récupérer le ledger principal
     const ledger = await this.em.findOne(LedgerAccount, { id: 'LEDGER_MASTER' });
     if (!ledger) {
       throw new NotFoundException('Compte principal Ledger introuvable.');
     }
 
-    //calcul des frais et du montant total à débiter
     const fees = Math.round(amount * 0.015);
     const totalDebit = amount + fees;
 
@@ -133,26 +97,156 @@ export class WalletService {
       throw new BadRequestException('Fonds insuffisants dans le Ledger.');
     }
 
-    //transaction de recharge
     ledger.balance -= totalDebit;
     owner.wallet.balance += amount;
 
-    const transaction = new Transaction();
-    transaction.type = TransactionType.LEDGER_DEBIT;
-    transaction.fromAccountId = ledger.id;
-    transaction.toAccountId = owner.wallet.id;
-    transaction.amount = amount;
-    transaction.fees = fees;
-    transaction.description = `Recharge de ${amount} HTG sur wallet ${phoneNumber}`;
-    transaction.status = TransactionStatus.COMPLETED;
+    const walletTransaction = new Transaction();
+    walletTransaction.type = TransactionType.WALLET_RECHARGE;
+    walletTransaction.fromAccountId = ledger.id;
+    walletTransaction.toAccountId = owner.wallet.id;
+    walletTransaction.amount = amount;
+    walletTransaction.fees = fees;
+    walletTransaction.description = `Recharge wallet ${amount} HTG pour ${owner.firstName} ${owner.lastName}`;
+    walletTransaction.status = TransactionStatus.COMPLETED;
 
-    await this.em.persistAndFlush([ledger, owner.wallet, transaction]);
+    const ledgerTransaction = new Transaction();
+    ledgerTransaction.type = TransactionType.LEDGER_DEBIT;
+    ledgerTransaction.fromAccountId = ledger.id;
+    ledgerTransaction.toAccountId = owner.wallet.id;
+    ledgerTransaction.amount = totalDebit;
+    ledgerTransaction.fees = 0;
+    ledgerTransaction.description = `Débit Ledger ${totalDebit} HTG pour recharge wallet ${amount} HTG`;
+    ledgerTransaction.status = TransactionStatus.COMPLETED;
+
+    await this.em.persistAndFlush([ledger, owner.wallet, walletTransaction, ledgerTransaction]);
 
     return {
       success: true,
-      message: `Wallet crédité avec ${amount} HTG (frais : ${fees} HTG)`,
-      balance: owner.wallet.balance,
-      transactionId: transaction.id,
+      data: {
+        walletTransaction: {
+          id: walletTransaction.id,
+          type: walletTransaction.type,
+          amount: walletTransaction.amount,
+          metadata: { ownerName: `${owner.firstName} ${owner.lastName}` },
+        },
+        ledgerTransaction: {
+          id: ledgerTransaction.id,
+          type: ledgerTransaction.type,
+          amount: ledgerTransaction.amount,
+        },
+        newBalance: owner.wallet.balance,
+        ledgerBalance: ledger.balance,
+      },
     };
   }
+
+  // GET /wallet/:phoneNumber/profile
+  async getProfile(phoneNumber: string, pin: string) {
+    const owner = await this.em.findOne(WalletOwner, { phoneNumber }, { populate: ['wallet'] });
+    if (!owner || !owner.wallet) {
+      throw new NotFoundException("Wallet introuvable.");
+    }
+
+    if (owner.wallet.pin !== pin) {
+      throw new BadRequestException('PIN invalide.');
+    }
+
+    return {
+      success: true,
+      profile: {
+        firstName: owner.firstName,
+        lastName: owner.lastName,
+        phoneNumber: owner.phoneNumber,
+        dateOfBirth: owner.dateOfBirth,
+        nationalId: owner.nationalId,
+        walletId: owner.wallet.id,
+        balance: owner.wallet.balance,
+      },
+    };
+  }
+
+  // GET /wallet/:phoneNumber/balance
+  async getBalance(phoneNumber: string, pin: string) {
+    const owner = await this.em.findOne(WalletOwner, { phoneNumber }, { populate: ['wallet'] });
+    if (!owner || !owner.wallet) {
+      throw new NotFoundException("Wallet introuvable.");
+    }
+
+    if (owner.wallet.pin !== pin) {
+      throw new BadRequestException('PIN invalide.');
+    }
+
+    return {
+      success: true,
+      balance: owner.wallet.balance,
+    };
+  }
+
+  // POST /wallet/transfer
+async transfer(fromPhoneNumber: string, pin: string, toPhoneNumber: string, amount: number, description: string) {
+  if (amount < 10) {
+    throw new BadRequestException('Le montant minimum de transfert est de 10 HTG.');
+  }
+
+  if (fromPhoneNumber === toPhoneNumber) {
+    throw new BadRequestException('Le transfert vers le même wallet est interdit.');
+  }
+
+  const fromOwner = await this.em.findOne(WalletOwner, { phoneNumber: fromPhoneNumber }, { populate: ['wallet'] });
+  if (!fromOwner || !fromOwner.wallet) {
+    throw new NotFoundException("Wallet émetteur introuvable.");
+  }
+
+  if (fromOwner.wallet.pin !== pin) {
+    throw new BadRequestException('PIN invalide pour le wallet émetteur.');
+  }
+
+  const toOwner = await this.em.findOne(WalletOwner, { phoneNumber: toPhoneNumber }, { populate: ['wallet'] });
+  if (!toOwner || !toOwner.wallet) {
+    throw new NotFoundException("Wallet destinataire introuvable.");
+  }
+
+  // Commission : 2% (0.02)
+  const fees = Math.round(amount * 0.02);
+  const totalDebit = amount + fees;
+
+  if (fromOwner.wallet.balance < totalDebit) {
+    throw new BadRequestException('Solde insuffisant pour effectuer ce transfert.');
+  }
+
+  // Débit wallet émetteur
+  fromOwner.wallet.balance -= totalDebit;
+
+  // Crédit wallet destinataire
+  toOwner.wallet.balance += amount;
+
+  // Transaction de transfert
+  const transferTransaction = new Transaction();
+  transferTransaction.type = TransactionType.WALLET_TRANSFER;
+  transferTransaction.fromAccountId = fromOwner.wallet.id;
+  transferTransaction.toAccountId = toOwner.wallet.id;
+  transferTransaction.amount = amount;
+  transferTransaction.fees = fees;
+  transferTransaction.description = description;
+  transferTransaction.status = TransactionStatus.COMPLETED;
+
+  // Enregistrer
+  await this.em.persistAndFlush([fromOwner.wallet, toOwner.wallet, transferTransaction]);
+
+  return {
+    success: true,
+    transaction: {
+      id: transferTransaction.id,
+      type: 'wallet_transfer',
+      from: fromPhoneNumber,
+      to: toPhoneNumber,
+      amount: amount,
+      fees: fees,
+      description: description,
+    },
+    fromNewBalance: fromOwner.wallet.balance,
+    toNewBalance: toOwner.wallet.balance,
+    ledgerCommission: fees,
+  };
+}
 }
