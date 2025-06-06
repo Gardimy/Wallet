@@ -13,8 +13,8 @@ import { RechargeWalletDto } from './dto/recharge-wallet.dto';
 import { RechargeWalletResponseDto } from './dto/recharge-wallet-response.dto';
 import { TransferWalletDto } from './dto/transfer-wallet.dto';
 
-@ApiTags('Wallet')
-@Controller('wallet')
+@ApiTags('Wallets')
+@Controller('wallets')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
