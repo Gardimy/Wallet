@@ -1,3 +1,4 @@
+// src/wallet/entities/ledger-account.entity.ts
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid'; // Rename 'v4' to avoid name conflict
 
