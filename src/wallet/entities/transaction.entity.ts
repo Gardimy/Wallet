@@ -20,7 +20,7 @@ export class Transaction {
   @PrimaryKey()
   id: string = uuidv4();
 
-  // ✅ Remove invalid 'enum' keyword, set type to string, and keep enum logic in the TypeScript type
+  // Remove invalid 'enum' keyword, set type to string, and keep enum logic in the TypeScript type
   @Property({ type: 'string' })
   type!: TransactionType;
 

@@ -12,6 +12,7 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { RechargeWalletDto } from './dto/recharge-wallet.dto';
 import { RechargeWalletResponseDto } from './dto/recharge-wallet-response.dto';
 import { TransferWalletDto } from './dto/transfer-wallet.dto';
+import { Query } from '@nestjs/common';
 
 @ApiTags('Wallets')
 @Controller('wallets')
@@ -101,5 +102,18 @@ async transfer(
     body.description
   );
 }
-
+@Get(':phoneNumber/transactions')
+@ApiOperation({ summary: "Historique des transactions d'un wallet" })
+@ApiParam({ name: 'phoneNumber', required: true })
+@ApiHeader({ name: 'x-pin', required: true, description: 'PIN du wallet' })
+@ApiOkResponse({
+  description: 'Liste des transactions du wallet',
+})
+async getTransactions(
+  @Param('phoneNumber') phoneNumber: string,
+  @Headers('x-pin') pin: string,
+  @Query('limit') limit = '20'
+): Promise<any> {
+  return this.walletService.getTransactions(phoneNumber, pin, parseInt(limit, 10));
+}
 }

@@ -249,4 +249,51 @@ async transfer(fromPhoneNumber: string, pin: string, toPhoneNumber: string, amou
     ledgerCommission: fees,
   };
 }
+async getTransactions(phoneNumber: string, pin: string, limit: number = 20) {
+  const owner = await this.em.findOne(WalletOwner, { phoneNumber }, { populate: ['wallet'] });
+  if (!owner || !owner.wallet) {
+    throw new NotFoundException("Wallet introuvable.");
+  }
+
+  if (owner.wallet.pin !== pin) {
+    throw new BadRequestException('PIN invalide.');
+  }
+
+  //Historique des transactions
+  // On récupère les transactions où le wallet est soit source soit destination
+  const transactions = await this.em.find(
+    Transaction,
+    {
+      $or: [
+        { fromAccountId: owner.wallet.id },
+        { toAccountId: owner.wallet.id },
+      ],
+    },
+    {
+      orderBy: { timestamp: 'DESC' },
+      limit: limit,
+    }
+  );
+
+  const data = transactions.map((txn) => ({
+    id: txn.id,
+    type: txn.type,
+    fromAccountId: txn.fromAccountId,
+    toAccountId: txn.toAccountId,
+    amount: txn.amount,
+    fees: txn.fees,
+    description: txn.description,
+    status: txn.status,
+    timestamp: txn.timestamp?.toISOString() ?? new Date().toISOString(),
+    metadata: {
+      ownerName: `${owner.firstName} ${owner.lastName}`,
+    },
+  }));
+
+  return {
+    success: true,
+    data,
+  };
+}
+
 }
