@@ -116,4 +116,19 @@ async getTransactions(
 ): Promise<any> {
   return this.walletService.getTransactions(phoneNumber, pin, parseInt(limit, 10));
 }
+// GET /admin/ledger/status
+@Get('/admin/ledger/status')
+@ApiOperation({ summary: 'Statut actuel du Ledger' })
+async getLedgerStatus() {
+  return this.walletService.getLedgerStatus();
+}
+
+// GET /admin/ledger/transactions
+@Get('/admin/ledger/transactions')
+@ApiOperation({ summary: 'Historique des transactions du Ledger' })
+@ApiParam({ name: 'limit', required: false, description: 'Nombre max de transactions à retourner' })
+async getLedgerTransactions(@Param('limit') limitParam?: string) {
+  const limit = limitParam ? parseInt(limitParam, 10) : 50;
+  return this.walletService.getLedgerTransactions(limit);
+  }
 }

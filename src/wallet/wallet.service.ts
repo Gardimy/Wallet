@@ -296,4 +296,52 @@ async getTransactions(phoneNumber: string, pin: string, limit: number = 20) {
   };
 }
 
+// GET Ledger Status
+async getLedgerStatus() {
+  const ledger = await this.em.findOne(LedgerAccount, { id: 'LEDGER_MASTER' });
+
+  if (!ledger) {
+    throw new NotFoundException('Compte Ledger principal introuvable.');
+  }
+
+  return {
+    success: true,
+    data: {
+      ledgerId: ledger.id,
+      balance: ledger.balance,
+    },
+  };
+}
+
+// GET Ledger Transactions
+async getLedgerTransactions(limit: number = 50) {
+  const transactions = await this.em.find(
+    Transaction,
+    {
+      $or: [
+        { fromAccountId: 'LEDGER_MASTER' },
+        { toAccountId: 'LEDGER_MASTER' },
+      ],
+    },
+    {
+      orderBy: { timestamp: 'DESC' },
+      limit,
+    },
+  );
+
+  return {
+    success: true,
+    data: transactions.map(txn => ({
+      id: txn.id,
+      type: txn.type,
+      fromAccountId: txn.fromAccountId,
+      toAccountId: txn.toAccountId,
+      amount: txn.amount,
+      fees: txn.fees,
+      description: txn.description,
+      status: txn.status,
+      timestamp: txn.timestamp?.toISOString() ?? new Date().toISOString(),
+    })),
+  };
+ }
 }
