@@ -10,7 +10,7 @@ import {
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { RechargeWalletDto } from './dto/recharge-wallet.dto';
-import { RechargeWalletResponseDto } from './dto/recharge-wallet-response.dto';
+// import { RechargeWalletResponseDto } from './dto/recharge-wallet-response.dto';
 import { TransferWalletDto } from './dto/transfer-wallet.dto';
 import { Query } from '@nestjs/common';
 
@@ -40,10 +40,10 @@ export class WalletController {
       },
     },
   })
-  @ApiOkResponse({
-    description: 'Recharge effectuée avec succès',
-    type: RechargeWalletResponseDto,
-  })
+  // @ApiOkResponse({
+  //   description: 'Recharge effectuée avec succès',
+  //   type: RechargeWalletResponseDto,
+  // })
   async recharge(@Body() body: RechargeWalletDto) {
     return this.walletService.recharge(body.phoneNumber, body.pin, body.amount);
   }
