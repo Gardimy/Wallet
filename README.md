@@ -28,7 +28,7 @@
   - [❓ FAQ ](#-faq-)
   - [📝 License ](#-license-)
 
-# 📖🚗 ALLET_API - Full Stack Wallet System <a name="about-project"></a>
+# 📖🚗 WALLET_API - Full Stack Wallet System <a name="about-project"></a>
 Wallet_Api is a simplified electronic wallet system that enables users to create a personal wallet, receive funds from a central Ledger Account, and perform wallet-to-wallet transfers. The system implements double-entry accounting for every transaction to maintain data integrity and traceability.
 
 The project exposes a RESTful API built using:
