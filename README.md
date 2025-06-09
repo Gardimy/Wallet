@@ -1,98 +1,194 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<a name="readme-top"></a>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<div align="center">
+  <br/>
+  <h1><b>WALLET_API - Full Stack Wallet System</b></h1><a name="about-project"></a>
+</div>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# 📗 Table of Contents
 
-## Description
+- [📗 Table of Contents](#-table-of-contents)
+- [📖🚗 Full Stack Wallet System ](#-luxury-speedsters-app-)
+  - [🛠 Built With ](#-built-with-)
+    - [Tech Stack ](#tech-stack-)
+    - [Key Features ](#key-features-)
+  - [🚀 Live Demo ](#-live-demo-)
+  - [🎫 Kanban Board ](#-kanban-board-)
+  - [💻 Getting Started ](#-getting-started-)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Install](#install)
+    - [Usage](#usage)
+    - [Run tests](#run-tests)
+  - [👥 Authors ](#-authors-)
+  - [🔭 Future Features ](#-future-features-)
+  - [🤝 Contributing ](#-contributing-)
+  - [⭐️ Show your support ](#️-show-your-support-)
+  - [🙏 Acknowledgments ](#-acknowledgments-)
+  - [❓ FAQ ](#-faq-)
+  - [📝 License ](#-license-)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# 📖🚗 ALLET_API - Full Stack Wallet System <a name="about-project"></a>
+Wallet_Api is a simplified electronic wallet system that enables users to create a personal wallet, receive funds from a central Ledger Account, and perform wallet-to-wallet transfers. The system implements double-entry accounting for every transaction to maintain data integrity and traceability.
 
-## Project setup
+The project exposes a RESTful API built using:
 
-```bash
-$ npm install
+    Backend: nest.js
+
+    Database: postgres sql
+
+    Auth via x-pin header for sensitive wallet operations
+## 🛠 Built With <a name="built-with"></a>
+
+> List of technologies used for this project
+
+<details>
+  <summary>BackEnd</summary>
+  <ul>
+    <li><a href="https://nestjs.com/">NEST.JS</a></li>
+  </ul>
+</details>
+
+<details>
+  <summary>Database</summary>
+  <ul>
+    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+  </ul>
+</details>
+
+<details>
+  <summary>Micro-ORM</summary>
+  <ul>
+    <li><a href="https://mikro-orm.io/">Micro-ORM</a></li>
+  </ul>
+</details>
+
+## Key Features <a name="key-features"></a>
+
+✅ Create Wallet
+✅ Recharge Wallet from Ledger
+✅ View Wallet Profile
+✅ View Wallet Balance
+✅ Wallet to Wallet Transfer (with 2% fees)
+✅ View Wallet Transaction History
+✅ Ledger Status & Ledger Transaction History
+✅ Double-entry Accounting
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+# 🚀 Live Demo <a name="live-demo"></a>
+
+[Under Construction](TBA) 💻📲
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 💻 Getting Started <a name="getting-started"></a>
+
+To get a local copy up and running, follow these steps.
+
+### Prerequisites
+
+In order to run this project you need:
+
+git clone https://github.com/Gardimy/Wallet.git
+
+you need to install ruby 3.2.2 using the prefer tool, example:
+
+- [nest](https://docs.nestjs.com/)
+- [nest](https://github.com/nestjs/nest)
+
+- Browser (Google Chrome, Mozilla Firefox, Safari or any other browser)
+
+### Setup
+
+Clone this repository to your desired folder:
+
+
+```sh
+  cd my-folder
+  git clone https://github.com/Gardimy/Wallet.git
+
+  ### Install
+
+Install this project with:
+
+
+```sh
+  cd Wallet
+  npm install
+  npm start
+  npm run start:dev
+or yarn start:dev
+
 ```
+## Configure environment
+```cp .env.example .env```
+ Edit .env with your DB credentials
 
-## Compile and run the project
+## Run Database Migrations
 
-```bash
-# development
-$ npm run start
+npm run mikro-orm migration:up
 
-# watch mode
-$ npm run start:dev
+ or yarn mikro-orm migration:up
 
-# production mode
-$ npm run start:prod
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Run tests
+## 👥 Authors <a name="authors"></a>
 
-```bash
-# unit tests
-$ npm run test
+👤 **Gardimy Charles** 🐱‍👤
+- GitHub: [@Gardimy](https://github.com/Gardimy)
+- Twitter: [@gardyelontiga45](https://twitter.com/gardyelontiga45)
+- LinkedIn: [Gardimy charles](https://www.linkedin.com/in/gardimycharles/)
 
-# e2e tests
-$ npm run test:e2e
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-# test coverage
-$ npm run test:cov
-```
+## 🔭 Future Features <a name="future-features"></a>
 
-## Deployment
+- [ ] **Add more functionalities**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 🤝 Contributing <a name="contributing"></a>
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Contributions, issues, and feature requests are welcome!
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Feel free to check the [issues page](https://github.com/Gardimy/Wallet/issues).
 
-## Resources
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Check out a few resources that may come in handy when working with NestJS:
+# ⭐️ Show your support <a name="support"></a>
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+If you like this project,please give it a ⭐️!
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Stay in touch
+## 🙏 Acknowledgments <a name="acknowledgements"></a>
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+We would like to thank Haitipay for giving mme the opportunity to learn and grow as developers. 🌟
 
-## License
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## ❓ FAQ <a name="faq"></a>
+
+- **Do I need to install any program before running this project?**
+
+  - [ ] **Yes, you need to install nestjs** 
+  
+  <br>
+
+- **Can I use this project for my own purposes?**
+
+  - [ ] **Yes, you can.**
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## 📝 License <a name="license"></a>
+
+
+THis project is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
